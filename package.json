@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon ./dist/",
+    "start:dev": "nodemon ./dist/index.js --inspect-brk=12345",
     "dev:watch": "tsc --w"
   },
   "author": "",

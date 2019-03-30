@@ -3,6 +3,7 @@ import { IRequestInjectedUser } from '../interfaces/request-injected-user.interf
 import { Post } from '../models/post.model';
 import { IFileUpload } from '../interfaces/file-upload.interface';
 import FileSystem from '../classes/file-system';
+import { userLogin } from './user.controller';
 
 const fileSystem = new FileSystem();
 
@@ -11,8 +12,10 @@ export const createPost = async (req: IRequestInjectedUser, res: Response) => {
     if (req.user) {
       const { message, coords } = req.body;
       const user =  req.user._id;
-      
-      let post = await Post.create( { message, coords, user } );
+
+      const imgs = fileSystem.moveImagesFromTempToPost( user );
+      console.log(imgs);
+      let post = await Post.create( { message, coords, user, imgs } );
       post = await post.populate('user', '-password').execPopulate();
 
       res.json({
@@ -55,24 +58,39 @@ export const uploadImg = async (req: any, res: Response) => {
       return res.status(400).json({ error: true, message: 'No se subió ningún archivo'});
     }
     
-    const img: IFileUpload = req.files.img;
+    const imgs: IFileUpload = req.files.imgs;
     
-    if (!img) {
+    if (!imgs) {
       return res.status(400).json({ error: true, message: 'No se subió ningún archivo -image'}); 
     }
   
-    if (!img.mimetype.includes('image')) {
+    if (!imgs.mimetype.includes('image')) {
       return res.status(400).json({ error: true, message: 'No se subió una imagen -image'}); 
     }
   
     
-    await fileSystem.saveTempImg( img, req.user._id );
+    await fileSystem.saveTempImg( imgs, req.user._id );
   
     res.json({
       success: true,
-      img: img.mimetype
+      imgs: imgs.mimetype
     });
   } catch (error) {
     return res.status(500).json({ error: true, message: 'Ocurrió un problema'}); 
   }
 };
+
+export const getImg = ( req: Request, res: Response ) => {
+  const { userId, img } = req.params;
+  
+  const image = fileSystem.getImageUrl( userId, img );
+
+  if ( image ) {
+    res.sendFile( image );
+  } else {
+    res.status(404).json({
+      error: true,
+      message: 'Imagen no disponible'
+    });
+  }
+}

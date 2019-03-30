@@ -40,4 +40,33 @@ export default class FileSystem {
     
     return `${uniqid()}.${ext}`;
   }
+
+  public moveImagesFromTempToPost( userId: string ): string[] {
+    const pathTemp = path.resolve( __dirname, '../uploads', userId, 'temp' );
+    const pathPost = path.resolve( __dirname, '../uploads', userId, 'post' );
+
+    if ( !fs.existsSync( pathTemp ) ) {
+      return [];
+    }
+
+    if ( !fs.existsSync( pathPost) ) {
+      fs.mkdirSync( pathPost );
+    }
+
+    const tempImages = this.getTempImages( pathTemp );
+   
+    tempImages
+      .forEach( ( image: string ) => fs.renameSync( path.join(pathTemp, image), path.join(pathPost, image) ) );
+
+    return tempImages;
+  }
+
+  private getTempImages( pathTemp: string ): string[] {
+    return fs.readdirSync( pathTemp ) || [];
+  }
+
+  public getImageUrl( userId: string , img: string  ) {
+    const imagePath = path.resolve( __dirname, '../uploads', userId, 'post' , img );
+    return fs.existsSync(imagePath) ? imagePath : path.resolve( __dirname, '../assets/400x250.jpg' );
+  }
 }

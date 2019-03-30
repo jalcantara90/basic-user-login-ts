@@ -91,3 +91,12 @@ export const updateUser = (req: IRequestInjectedUser, res: Response) => {
     });
   }
 };
+
+export const getUserData = (req: IRequestInjectedUser, res: Response) => {
+  const { user } = req;
+
+  res.json({
+    success: true,
+    user
+  });
+};
