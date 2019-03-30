@@ -1,0 +1,39 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-icon slot="icon-only" name="logo-instagram"></ion-icon>
+    </ion-buttons>
+
+    <ion-title>
+      Fotosgram
+    </ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+    <!-- Refresher -->
+    <ion-refresher slot="fixed" (ionRefresh)="reload($event)">
+      <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+
+    <!-- Posts -->
+    <app-posts [posts]="posts"></app-posts>
+
+    <!-- Infinite scroll -->
+
+    <ion-infinite-scroll
+        threshold="150px"
+        (ionInfinite)="loadNextPostPage( $event )"
+        [disabled]="infiniteScrollDisabled">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data…">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>
