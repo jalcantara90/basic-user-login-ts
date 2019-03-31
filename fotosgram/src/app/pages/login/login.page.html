@@ -1,9 +1,139 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-slides class="mainSlide" #mainSlide>
+    <ion-slide>
+      <form (ngSubmit)="login( flogin )" #flogin="ngForm">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col>
+              <img src="/assets/avatars/av-1.png" />
+            </ion-col>
+          </ion-row>
 
+          <ion-row>
+            <ion-col>
+              <ion-list>
+                <ion-item>
+                  <ion-label>Email</ion-label>
+                  <ion-input ngModel #email="ngModel" name="email" type="email" required></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Password</ion-label>
+                  <ion-input
+                    name="password"
+                    type="password"
+                    required
+                    ngModel 
+                    #password="ngModel"
+                  ></ion-input>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-button type="submit" expand="full" color="tertiary" shape="round">
+                Login
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col>
+            <h3>Seleccione Avatar</h3>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-slides [options]="avatarSlidesOptions">
+              <ion-slide *ngFor="let avatar of avatars">
+                <ion-img
+                  class="pick-avatar"
+                  src="/assets/avatars/{{ avatar.img }}"
+                  [ngClass]="{ 'pick-avatar-seleccionado': avatar.selected }"
+                  (click)="avatarSelected( avatar )"
+                ></ion-img>
+              </ion-slide>
+            </ion-slides>
+          </ion-col>
+        </ion-row>
+
+        <form (ngSubmit)="signUp( fSignUp )" #fSignUp="ngForm">
+          <ion-row>
+            <ion-col>
+              <ion-list>
+                <ion-item>
+                  <ion-label>Email</ion-label>
+                  <ion-input ngModel #email="ngModel" name="email" type="email" required></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Nombre</ion-label>
+                  <ion-input ngModel #name="ngModel" name="name" type="text" required></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Password</ion-label>
+                  <ion-input
+                    name="password"
+                    type="password"
+                    required
+                    ngModel
+                    #password="ngModel"
+                  ></ion-input>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-button expand="full" type="submit" color="tertiary" shape="round">
+                Crear usuario
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </form>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          shape="round"
+          expand="full"
+          size="small"
+          fill="outline"
+          color="tertiary"
+          (click)="goToLogin()"
+        >
+          Ingresar
+        </ion-button>
+      </ion-col>
+
+      <ion-col>
+        <ion-button
+          shape="round"
+          expand="full"
+          size="small"
+          fill="outline"
+          color="tertiary"
+          (click)="goToSignup()"
+        >
+          Registrarme
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
